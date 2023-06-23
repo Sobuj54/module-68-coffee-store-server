@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 // this is a must import in order to use environment variables
 require("dotenv").config();
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -24,6 +24,13 @@ async function run() {
 
     const coffeeCollection = client.db("coffeeDB").collection("coffee");
 
+    app.get("/coffee", async (req, res) => {
+      const cursor = coffeeCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
+    // sending  data to database
     app.post("/coffee", async (req, res) => {
       const newCoffee = req.body;
       console.log(newCoffee);
